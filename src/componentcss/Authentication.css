@@ -9,3 +9,11 @@
     align-items: center;
     flex-direction: column;
 }
+
+.authenticate-main {
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(255, 0, 0, 0.5); /* Bright red with 50% transparency */
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 10rem;
+}

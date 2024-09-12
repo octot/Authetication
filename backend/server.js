@@ -76,7 +76,7 @@ app.post('/forgot-password', async (req, res) => {
         to: user.email,
         from: 'aajaykumarr32@gmail.com',
         subject: 'Password Reset',
-        text: `Please click on the following link to reset your password: http://localhost:3001/reset-password/${token}`
+        text: `Please click on the following link to reset your password: http://localhost:3000/reset-password/${token}`
     };
     transporter.sendMail(mailOptions, (err) => {
         if (err) {
@@ -85,19 +85,23 @@ app.post('/forgot-password', async (req, res) => {
         res.status(200).send('Email sent');
     });
 })
-
 app.post('/reset-password/:token', async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body
-    const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
-    if (!user) {
-        return res.status(400).send('Password reset token is invalid or has expired');
+    try {
+        const user = await User.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
+        if (!user) {
+            return res.status(400).send('Password reset token is invalid or has expired');
+        }
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+        res.status(200).send('Password has been reset');
     }
-    user.password = await bcrypt.hash(newPassword, 10);
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    await user.save();
-    res.status(200).send('Password has been reset');
+    catch (error) {
+        res.status(500).send('Server error');
+    }
 })
 app.post('/change-password', async (req, res) => {
     const { name, currentPassword, newPassword } = req.body;

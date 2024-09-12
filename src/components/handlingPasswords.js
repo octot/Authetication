@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { TextField, Button, Box } from '@mui/material';
 
 function ForgotPassword() {
     const [email, setEmail] = useState('');
@@ -12,49 +16,61 @@ function ForgotPassword() {
             console.log("response", response)
             alert('Password reset email sent');
         } catch (error) {
-            console.error("errorfromforgotpassword", error.response.data)
+            console.error("errorfromforgotpassword", error)
             alert('User Email  not found try creating user with the given mail id    ');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <input
+            <TextField
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                required
+                margin="normal"
+                variant="outlined"
             />
-            <button type="submit">Send Reset Email</button>
+            <Button type="submit">Send Reset Email</Button>
+            <Box mt={2}>
+                <Link to="/">Login</Link>
+            </Box>
         </form>
     );
 }
 
-function ResetPassword({ match }) {
+function ResetPassword() {
     const [newPassword, setNewPassword] = useState('');
-
+    const { token } = useParams();
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:3001/reset-password/${match.params.token}`, { newPassword });
+            // console.log("match.params.token ", match.params.token);
+            await axios.post(`http://localhost:3001/reset-password/${token}`, { newPassword });
             alert('Password has been reset');
         } catch (error) {
+            console.log("error from resetting password", error);
             alert('Error resetting password');
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Enter new password"
-                required
-            />
-            <button type="submit">Reset Password</button>
-        </form>
+        <div>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter new password"
+                    required
+                />
+                <button type="submit">Reset Password</button>
+            </form>
+            <div>
+                <Link to="/">Back to Home</Link>
+            </div>
+        </div>
+
     );
 }
 

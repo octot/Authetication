@@ -1,12 +1,12 @@
 import { Button, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react';
-
+import { Link } from 'react-router-dom';
+import '../componentcss/login.css'
 const Login = () => {
     const [loginName, setLoginName] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
     const handleLogin = async () => {
         try {
             const response = await axios.post('http://localhost:3001/login', { loginName, loginPassword });
@@ -16,11 +16,16 @@ const Login = () => {
             alert('Invalid credentials');
         }
     };
-
     if (isAuthenticated) {
-        return <h1>Welcome</h1>;
+        return (
+            <div>
+                <h1>Welcome</h1>
+                <div>
+                    <Link to="/logout">Logout </Link>
+                </div>
+            </div>
+        )
     }
-
     return (
         <div className='login'>
             <Typography variant="h4" style={{ marginTop: '20px' }}>Login</Typography>
@@ -42,8 +47,11 @@ const Login = () => {
             <Button variant="contained" color="primary" onClick={handleLogin}>
                 Login
             </Button>
+            <div>
+                <p className='sign-up'>Dont have an account? <Link to="/signUp">Sign up </Link> </p>
+                <p className='forget-password'>Forget <Link to="/forgetpassword">Username/Password</Link> </p>
+            </div>
         </div>
     );
 };
-
 export default Login;

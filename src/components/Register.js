@@ -1,7 +1,8 @@
 import { Button, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react';
-
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import '../componentcss/register.css'
 const Register = () => {
     const [registeredName, setRegisteredName] = useState('');
     const [registeredPassword, setRegisteredPassword] = useState('');
@@ -48,6 +49,9 @@ const Register = () => {
             <Button variant="contained" color="primary" onClick={register}>
                 Register
             </Button>
+            <div>
+                <p className='login'>Already a user <Link to="/">login</Link></p>
+            </div>
         </div>
     );
 };

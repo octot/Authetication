@@ -56,10 +56,10 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/forgot-password', async (req, res) => {
-    const { email } = req.body;
+    const { loginName, email } = req.body;
     const user = await User.findOne({ email })
     if (!user) {
-        return res.status(404).send('User not found')
+        return res.status(404).send('Email not found Try with the one registered')
     }
     const token = crypto.randomBytes(20).toString('hex');
     user.resetPasswordToken = token;
@@ -76,7 +76,8 @@ app.post('/forgot-password', async (req, res) => {
         to: user.email,
         from: 'aajaykumarr32@gmail.com',
         subject: 'Password Reset',
-        text: `Please click on the following link to reset your password: http://localhost:3000/reset-password/${token}`
+        text: `UserName :${loginName}
+        Please click on the following link to reset your password: http://localhost:3000/reset-password/${token}`
     };
     transporter.sendMail(mailOptions, (err) => {
         if (err) {

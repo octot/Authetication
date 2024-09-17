@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import '../componentcss/Authentication.css';
 import Login from '../components/Login';
 import Register from '../components/Register';
+import Home from '../components/Home';
 
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { ChangePassword, ForgotPassword, ResetPassword } from '../components/handlingPasswords';
@@ -15,8 +16,9 @@ const Authentication = () => {
                 <Routes>
                     <Route path="/signUp" element={<Register />} />
                     <Route path="/" element={<Login />} />
+                    <Route path="/home" element={<Home />} />
                     <Route path="/forgetpassword" element={<ForgotPassword />} />
-                    <Route path="/logout" element={<Login />} />
+                    <Route path="/login" element={<Login />} />
                     <Route path="/reset-password/:token" element={<ResetPassword />} />
                     {/*
                     <ResetPassword />

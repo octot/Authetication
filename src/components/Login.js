@@ -1,12 +1,22 @@
 import { Button, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../componentcss/login.css'
+import Home from './Home'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 const Login = () => {
     const [loginName, setLoginName] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const navigate = useNavigate();
+    const handleLogOut = () => {
+        localStorage.removeItem('token')
+        setIsAuthenticated(false)
+        setLoginName('')
+        setLoginPassword('')
+        navigate('/login')
+    }
     const handleLogin = async () => {
         try {
             const response = await axios.post('http://localhost:3001/login', { loginName, loginPassword });
@@ -19,10 +29,7 @@ const Login = () => {
     if (isAuthenticated) {
         return (
             <div>
-                <h1>Welcome</h1>
-                <div>
-                    <Link to="/logout">Logout </Link>
-                </div>
+                <button onClick={handleLogOut}>Logout</button>
             </div>
         )
     }
